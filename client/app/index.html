@@ -15,6 +15,43 @@
     <!-- endbuild -->
     <style>
       #map {  height: 400px;}
+
+      /*#map.hide {
+        visibility: hidden;
+      }
+      #map.show {
+        visibility: visible;
+      }*/
+
+      #load {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid blue;
+        border-right: 16px solid green;
+        border-bottom: 16px solid red;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+        visibility: visible;
+      }
+
+      #load.show{
+        visibility: visible;
+      }
+      #load.hide{
+        visibility: hidden;
+      }
+
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
     </style>
   </head>
   <body ng-app="clientApp">
@@ -47,6 +84,7 @@
             <li>
             <li style="display: block; color: #999999; font-size: 14px; font-weight: bold; text-transform: uppercase; padding: 3px 15px;">Taxi</li>
             <li class="active"><a href="#/home">Dashboard</a></li>
+            <li><a href="#/stats">Statistics</a></li>
             <li><a href="#/trips">Trips</a></li>
             <li><a href="#">Heat Map</a></li>
             </li>
@@ -74,12 +112,16 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.3/leaflet.draw.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.3/leaflet.draw.js'></script>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/trips.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/stats.js"></script>
         <!-- endbuild -->
 </body>
 </html>

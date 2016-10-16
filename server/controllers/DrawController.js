@@ -55,27 +55,57 @@ router.get('/draw/dropdown', function (req, res) {
 
 router.get('/draw/trip', function (req, res) {
     validate(req);
-    /*var startDate = req.param.startDate;
-     var endDate = req.param.endDate;
-     if(startDate == null || endDate == null){
-     startDate = "2014-04-01T00:00:00.000Z";
-     endDate = "2014-04-01T23:59:59.999Z";
-     }else{
+    var polygon = req.query.polygon;
+    if (polygon != null) {
+        var vals = polygon.split(',');
+        var coordinates = [];
+        var result = [];
 
-     }*/
-
-    model.trips.find({'startTime': {
-        $gte: new Date("2014-04-01T00:00:00.000Z"),
-        $lte : new Date("2014-04-01T23:59:59.999Z")
-    }}, function (err, docs) {
-        if(err){
-            res.status(500).send(JSON.stringify({err: err, msg: "Failed to get dropdown from db"}));
-            console.log(JSON.stringify({err: err, msg: "Failed to get dropdown from db"}));
-            return;
+        for (var val = 0; val < vals.length - 1; val += 2) {
+            var json = [];
+            json.push(vals[val]);
+            json.push(vals[val + 1]);
+            result.push(json);
         }
-        res.json(processTripGeojson(docs));
-    }).limit(10).sort({ "_id":1})
+        coordinates.push(result);
 
+        model.trips.find(
+            {
+                tripPoints: {
+                    $geoWithin: {
+                        $geometry: {
+                            type: "Polygon",
+                            coordinates: coordinates
+                        }
+                    }
+                },
+                startTime: {
+                    $gte: new Date("2014-04-01T00:00:00.000Z"),
+                    $lte: new Date("2014-04-01T23:59:59.999Z")
+                }
+            }, function (err, docs) {
+                if (err) {
+                    res.status(500).send(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                    console.log(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                    return;
+                }
+                res.json(processTripGeojson(docs));
+            }).limit(10);
+    } else {
+        model.trips.find({
+            'startTime': {
+                $gte: new Date("2014-04-01T00:00:00.000Z"),
+                $lte: new Date("2014-04-01T23:59:59.999Z")
+            }
+        }, function (err, docs) {
+            if (err) {
+                res.status(500).send(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                console.log(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                return;
+            }
+            res.json(processTripGeojson(docs));
+        }).limit(10).sort({"_id": 1});
+    }
 });
 
 function processGeojson(doc, isPickup) {
