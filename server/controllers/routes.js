@@ -1,3 +1,4 @@
 module.exports = {
-    tripsApi: require('./TripController')
+    tripsApi: require('./TripController'),
+    drawApi : require('./DrawController')
 };

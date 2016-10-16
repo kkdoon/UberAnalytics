@@ -39,6 +39,7 @@ app.use("/alive", function (req, res, next) {
 
 // Route Handlers
 app.use(version, routes.tripsApi);
+app.use(version, routes.drawApi);
 
 // Start web server
 app.listen(port);
