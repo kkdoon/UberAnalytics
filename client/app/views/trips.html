@@ -1,0 +1,16 @@
+<table class="table table-striped">
+  <thead>
+  <th>Start Time</th>
+  <th>End Time</th>
+  <th>Pickup Point</th>
+  <th>Dropdown Point</th>
+  </thead>
+  <tbody>
+  <tr ng-repeat="trip in trips">
+    <td>{{ trip.startTime }}</td>
+    <td>{{ trip.endTime }}</td>
+    <td>{{ trip.pickupPoint.coordinates[1] }}, {{ trip.pickupPoint.coordinates[0] }}</td>
+    <td>{{ trip.dropdownPoint.coordinates[1] }}, {{ trip.dropdownPoint.coordinates[0] }}</td>
+  </tr>
+  </tbody>
+</table>
