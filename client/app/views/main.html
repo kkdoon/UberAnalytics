@@ -1,33 +1,58 @@
-<!--div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-</div!-->
-<div id="page-wrapper">
-  <div class="row">
-    <h1 class="page-header">Dashboard</h1>
-  </div>
-  <div class="panel panel-default">
+  <h3>Dashboard</h3>
+  <div class="panel panel-primary">
     <div class="panel-heading">
       <p>Map</p>
     </div>
+    <div class="panel-body">
+      <div id='map'>
+      </div>
+      <script>
+        /*mapboxgl.accessToken = 'pk.eyJ1Ijoia2tkb29uIiwiYSI6ImNpdWMwanltYjAwNmIyeXAyejBxYjlkY2QifQ.kdMjB6xkE-W-P4ff4y0ujg';
+        var map = new mapboxgl.Map({
+          container: 'map', // container id
+          style: 'mapbox://styles/mapbox/streets-v9',
+          center: [-74.50, 40], // starting position
+          zoom: 9 // starting zoom
+        });*/
+        L.mapbox.accessToken = 'pk.eyJ1Ijoia2tkb29uIiwiYSI6ImNpdWMwanltYjAwNmIyeXAyejBxYjlkY2QifQ.kdMjB6xkE-W-P4ff4y0ujg';
+        var geojson = {
+          type: 'FeatureCollection',
+          features: [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [-77.03238901390978,38.913188059745586]
+              },
+              "properties": {
+                "title": "Mapbox DC",
+                "description": "1714 14th St NW, Washington DC",
+                "marker-color": "#fc4353",
+                "marker-size": "large",
+                "marker-symbol": "monument"
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [-122.414, 37.776]
+              },
+              "properties": {
+                "title": "Mapbox SF",
+                "description": "155 9th St, San Francisco",
+                "marker-color": "#fc4353",
+                "marker-size": "large",
+                "marker-symbol": "harbor"
+              }
+            }
+          ]
+        };
+        L.mapbox.map('map', 'mapbox.streets')
+          .setView([37.8, -96], 4)
+          .featureLayer.setGeoJSON(geojson);
+      </script>
+    </div>
   </div>
- </div>
+

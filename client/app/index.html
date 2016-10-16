@@ -13,50 +13,47 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    <style>
+      #map {  height: 400px;}
+    </style>
   </head>
   <body ng-app="clientApp">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <div class="header">
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="#/">Uber Analytics</a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-            <ul class="nav navbar-nav">
-              <li><a href="#/about">About</a></li>
-            </ul>
-          </div>
+      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#/">Uber Analytics</a>
         </div>
-      </div>
-    </div>
+        <!--div class="collapse navbar-collapse" id="js-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#/about">About</a></li>
+          </ul>
+        </div!-->
+      </nav>
 
-    <div class="row">
-      <div class="col-sm-2">
-        <div class="well">
-          <ul class="nav nav-list">
+
+    <div class="row" style="margin-top: 10px">
+      <div class="navbar-default sidebar col-sm-2" role="navigation" style="height: 600px">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
+            <li>
             <li style="display: block; color: #999999; font-size: 14px; font-weight: bold; text-transform: uppercase; padding: 3px 15px;">Taxi</li>
             <li class="active"><a href="#/home">Dashboard</a></li>
             <li><a href="#/trips">Trips</a></li>
             <li><a href="#">Heat Map</a></li>
-          </ul>
+            </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9" style="padding: 0; margin-left: 5px">
           <div ng-view=""/>
       </div>
     </div>
@@ -71,6 +68,12 @@
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+
+    <!-- Third Party Library -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
