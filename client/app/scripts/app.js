@@ -31,20 +31,6 @@ angular
         templateUrl: 'views/trips.html',
         controller: 'TripsCtrl'
       })
-      .when('/stats', {
-        templateUrl: 'views/stats.html',
-        controller: 'StatsCtrl',
-        controllerAs: 'stats'
-      })
-      .when('/pickups', {
-        templateUrl: 'views/pickups.html',
-        controller: 'PickupsCtrl'
-      })
-      .when('/heat', {
-        templateUrl: 'views/heat.html',
-        controller: 'HeatCtrl',
-        controllerAs: 'heat'
-      })
       .when('/charts', {
         templateUrl: 'views/charts.html',
         controller: 'ChartsCtrl',

@@ -1,12 +1,7 @@
 # client
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.15.1.
+The client side uses angular for front-end MVC. Yo is used for scaffolding purposes.
 
 ## Build & development
 
 Run `grunt` for building and `grunt serve` for preview.
-
-## Testing
-
-Running `grunt test` will run the unit tests with karma.

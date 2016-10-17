@@ -6,12 +6,19 @@ var model = require('../models/index');
 router.get('/trips', function (req, res) {
     validate(req);
 
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get trips data from db"}));
+        return;
+    }
+
     var cursor = model.trips.find({'startTime': {
-        $gte: new Date("2014-04-01T00:00:00.000Z"),
-        $lte : new Date("2014-04-01T23:59:59.999Z")
+        $gte:  new Date(Number(startDateTime)),
+        $lte : new Date(Number(endDateTime))
     }}/*, function (err, docs) {
         res.json(docs);
-    }*/).limit(10).sort({ "_id":1}).cursor();
+    }*/).limit(500).sort({ "_id":1}).cursor();
 
     var prev = null;
     res.writeHead(200, {'Content-Type': "application/json" });

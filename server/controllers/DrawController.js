@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var validate = require('../util/RequestValidate');
 var model = require('../models/index');
-var limit = 1000;
+var limit = 200;
 
 router.get('/draw/pickup', function (req, res) {
     validate(req);
@@ -93,7 +93,7 @@ router.get('/draw/trip', function (req, res) {
                     return;
                 }
                 res.json(processTripGeojson(docs));
-            }).limit(limit);
+            });
     } else {
         model.trips.find({
             'startTime': {

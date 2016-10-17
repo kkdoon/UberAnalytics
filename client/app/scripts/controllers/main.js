@@ -9,7 +9,6 @@
  */
 angular.module('clientApp')
   .controller('MainCtrl', function ($scope, Restangular) {
-    $(function () {
       var featureLayer, featureGroup, heat;
       var currentFilter = 'tripShape';
       var prevDate = '4/1/2014 12:00 PM';
@@ -253,8 +252,4 @@ angular.module('clientApp')
           finishedLoading();
         }
       }
-
-
-
-    });
   });

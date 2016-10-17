@@ -8,15 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ChartsCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
-
-$(function () {
+  .controller('ChartsCtrl', function ($scope) {
   $.getJSON('http://localhost:8080/v1/stats/tripFrequency', function (data) {
 
     $('#chart-container').highcharts({
@@ -73,5 +65,4 @@ $(function () {
   });
 
   /** Chart 2: Top Speed, Max. Distance, No of Trips **/
-  
 });
