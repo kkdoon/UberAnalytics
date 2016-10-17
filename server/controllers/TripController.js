@@ -5,14 +5,7 @@ var model = require('../models/index');
     
 router.get('/trips', function (req, res) {
     validate(req);
-    /*var startDate = req.param.startDate;
-    var endDate = req.param.endDate;
-    if(startDate == null || endDate == null){
-        startDate = "2014-04-01T00:00:00.000Z";
-        endDate = "2014-04-01T23:59:59.999Z";
-    }else{
 
-    }*/
     var cursor = model.trips.find({'startTime': {
         $gte: new Date("2014-04-01T00:00:00.000Z"),
         $lte : new Date("2014-04-01T23:59:59.999Z")

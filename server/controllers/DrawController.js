@@ -2,22 +2,20 @@ var express = require('express');
 var router = express.Router();
 var validate = require('../util/RequestValidate');
 var model = require('../models/index');
-var cluster = require('./ClusterController');
+var limit = 1000;
 
 router.get('/draw/pickup', function (req, res) {
     validate(req);
-    /*var startDate = req.param.startDate;
-    var endDate = req.param.endDate;
-    if(startDate == null || endDate == null){
-        startDate = "2014-04-01T00:00:00.000Z";
-        endDate = "2014-04-01T23:59:59.999Z";
-    }else{
-
-    }*/
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get trips data from db"}));
+        return;
+    }
 
     model.trips.find({'startTime': {
-        $gte: new Date("2014-04-01T00:00:00.000Z"),
-        $lte : new Date("2014-04-01T23:59:59.999Z")
+        $gte:  new Date(Number(startDateTime)),
+        $lte : new Date(Number(endDateTime))
     }}, function (err, docs) {
             if(err){
                 res.status(500).send(JSON.stringify({err: err, msg: "Failed to get pickups from db"}));
@@ -25,24 +23,21 @@ router.get('/draw/pickup', function (req, res) {
                 return;
             }
             res.json(processGeojson(docs, true));
-    }).limit(10).sort({ "_id":1})
-
+    }).limit(limit)
 });
 
 router.get('/draw/dropdown', function (req, res) {
     validate(req);
-    /*var startDate = req.param.startDate;
-     var endDate = req.param.endDate;
-     if(startDate == null || endDate == null){
-     startDate = "2014-04-01T00:00:00.000Z";
-     endDate = "2014-04-01T23:59:59.999Z";
-     }else{
-
-     }*/
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get trips data from db"}));
+        return;
+    }
 
     model.trips.find({'startTime': {
-        $gte: new Date("2014-04-01T00:00:00.000Z"),
-        $lte : new Date("2014-04-01T23:59:59.999Z")
+        $gte:  new Date(Number(startDateTime)),
+        $lte : new Date(Number(endDateTime))
     }}, function (err, docs) {
         if(err){
             res.status(500).send(JSON.stringify({err: err, msg: "Failed to get dropdown from db"}));
@@ -50,12 +45,21 @@ router.get('/draw/dropdown', function (req, res) {
             return;
         }
         res.json(processGeojson(docs, false));
-    }).limit(10).sort({ "_id":1})
-
+    }).limit(limit)
 });
 
 router.get('/draw/trip', function (req, res) {
     validate(req);
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+
+    console.log(startDateTime + ',' + endDateTime);
+    
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get trips data from db"}));
+        return;
+    }
+
     var polygon = req.query.polygon;
     if (polygon != null) {
         var vals = polygon.split(',');
@@ -81,8 +85,8 @@ router.get('/draw/trip', function (req, res) {
                     }
                 },
                 startTime: {
-                    $gte: new Date("2014-04-01T00:00:00.000Z"),
-                    $lte: new Date("2014-04-01T23:59:59.999Z")
+                    $gte:  new Date(Number(startDateTime)),
+                    $lte : new Date(Number(endDateTime))
                 }
             }, function (err, docs) {
                 if (err) {
@@ -91,12 +95,12 @@ router.get('/draw/trip', function (req, res) {
                     return;
                 }
                 res.json(processTripGeojson(docs));
-            }).limit(100);
+            }).limit(limit);
     } else {
         model.trips.find({
             'startTime': {
-                $gte: new Date("2014-04-01T00:00:00.000Z"),
-                $lte: new Date("2014-04-01T23:59:59.999Z")
+                $gte:  new Date(Number(startDateTime)),
+                $lte : new Date(Number(endDateTime))
             }
         }, function (err, docs) {
             if (err) {
@@ -105,7 +109,7 @@ router.get('/draw/trip', function (req, res) {
                 return;
             }
             res.json(processTripGeojson(docs));
-        }).limit(100).sort({"_id": 1});
+        }).limit(limit);
     }
 });
 

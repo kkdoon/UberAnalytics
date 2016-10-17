@@ -1,9 +1,33 @@
 <h3>Dashboard</h3>
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <div class="row">
-      <div class="col-sm-2"> <h4>Map</h4> </div>
-      <div class="dropdown col-sm-2" style="margin-left: 65%;">
+      <div> <h4>Map</h4> </div>
+    </div>
+    <div class="panel-body">
+      <div class="row" style="margin-left: 10%">
+        <div class="dropdown col-sm-4">
+          <div class="form-group">
+            <strong>From Date:</strong>
+            <div class='input-group date' id='datetimepickerFromDate'>
+              <input type='text' class="form-control" />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown col-sm-4">
+          <div class="form-group">
+            <strong>To Date:</strong>
+            <div class='input-group date' id='datetimepickerToDate'>
+              <input type='text' class="form-control" />
+                      <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+            </div>
+          </div>
+        </div>
+      <div class = "col-sm-3" style="margin-left: 5%; margin-top: 15px">
         <button class="btn btn-success" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Filter
           <span class="caret"></span>
@@ -15,39 +39,8 @@
         </ul>
       </div>
       </div>
-    </div>
-    <div class="panel-body">
       <div id='map'>
       </div>
-      <script>
-        var featureLayer;
-          $(function(){
-            $(".dropdown-menu").on("click", "li", function(event){
-              console.log("You clicked the drop downs: " + event.target.title);
-              featureLayer.clearLayers();
-              featureLayer.loadURL('http://localhost:8080/v1/draw/' + event.target.title).addTo(map);
-            })
-          });
-
-        //mapboxgl.accessToken = 'pk.eyJ1Ijoia2tkb29uIiwiYSI6ImNpdWMwanltYjAwNmIyeXAyejBxYjlkY2QifQ.kdMjB6xkE-W-P4ff4y0ujg';
-        /*var map = new mapboxgl.Map({
-          container: 'map', // container id
-          style: 'mapbox://styles/mapbox/streets-v9',
-          center: [-74.50, 40], // starting position
-          zoom: 5 // starting zoom
-        });*/
-        L.mapbox.accessToken = 'pk.eyJ1Ijoia2tkb29uIiwiYSI6ImNpdWMwanltYjAwNmIyeXAyejBxYjlkY2QifQ.kdMjB6xkE-W-P4ff4y0ujg';
-
-        /*L.mapbox.map('map', 'mapbox.streets')
-          .setView([40.77, -73.88], 11)
-          .loadURL('http://localhost:8080/v1/trips?format=geojson');*/
-          //.featureLayer.setGeoJSON(map);
-        var map = L.mapbox.map('map', 'mapbox.streets')
-          .setView([40.77, -73.88], 11);
-        featureLayer = L.mapbox.featureLayer()
-          .loadURL('http://localhost:8080/v1/draw/trip')
-          .addTo(map);
-      </script>
     </div>
   </div>
 
