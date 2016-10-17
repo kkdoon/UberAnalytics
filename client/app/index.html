@@ -8,6 +8,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel='stylesheet' href='bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -67,6 +68,10 @@
         overflow:auto;
         width:100px;
       }
+
+      .highcharts-yaxis-grid .highcharts-grid-line {
+        display: none;
+      }
     </style>
   </head>
   <body ng-app="clientApp">
@@ -103,6 +108,7 @@
             <li><a href="#/pickups">Pickups</a></li>
             <li><a href="#/trips">Trips</a></li>
             <li><a href="#/heat">Heat Map</a></li>
+            <li><a href="#/charts">Charts</a></li>
             </li>
             </ul>
           </div>
@@ -120,6 +126,8 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -135,8 +143,12 @@
     <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
     <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/trips.js"></script>
@@ -144,6 +156,7 @@
         <script src="scripts/controllers/stats.js"></script>
         <script src="scripts/controllers/pickups.js"></script>
         <script src="scripts/controllers/heat.js"></script>
+        <script src="scripts/controllers/charts.js"></script>
         <!-- endbuild -->
 </body>
 </html>

@@ -45,6 +45,11 @@ angular
         controller: 'HeatCtrl',
         controllerAs: 'heat'
       })
+      .when('/charts', {
+        templateUrl: 'views/charts.html',
+        controller: 'ChartsCtrl',
+        controllerAs: 'charts'
+      })
       .otherwise({
         redirectTo: '/'
       });

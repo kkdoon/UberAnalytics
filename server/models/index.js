@@ -1,3 +1,4 @@
 module.exports = {
-    trips: require('./Trips')
+    trips: require('./Trips'),
+    tripFrequency: require('./TripFrequency')
 };

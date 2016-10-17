@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
 // Trip model
-var TripSchema = new mongoose.Schema({
-    startTime : { type : Date, default: Date.now, required: true },
+var TripSchema = new mongoose.Schema(//{
+    /*startTime : { type : Date, default: Date.now, required: true },
     endTime : { type : Date, default: Date.now, required: true },
-    pickupPoint : {
+    ls : {
             lat: { type: Number, required: true},
             lon: { type: Number, required: true}
     },
@@ -12,7 +12,7 @@ var TripSchema = new mongoose.Schema({
         lat: { type: Number, required: true},
         lon: { type: Number, required: true}
     }
-}, {collection: 'trips'});
+}, */ {}, {collection: 'trips'});
 
 var Trips = mongoose.model('trips', TripSchema);
 
