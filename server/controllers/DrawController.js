@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var validate = require('../util/RequestValidate');
 var model = require('../models/index');
-    
+var cluster = require('./ClusterController');
+
 router.get('/draw/pickup', function (req, res) {
     validate(req);
     /*var startDate = req.param.startDate;
@@ -90,7 +91,7 @@ router.get('/draw/trip', function (req, res) {
                     return;
                 }
                 res.json(processTripGeojson(docs));
-            }).limit(10);
+            }).limit(100);
     } else {
         model.trips.find({
             'startTime': {
@@ -104,8 +105,101 @@ router.get('/draw/trip', function (req, res) {
                 return;
             }
             res.json(processTripGeojson(docs));
-        }).limit(10).sort({"_id": 1});
+        }).limit(100).sort({"_id": 1});
     }
+});
+
+router.get('/draw/clusterPickups', function (req, res) {
+    validate(req);
+    var polygon = req.query.polygon;
+    if (polygon == null) {
+        res.status(400).send(JSON.stringify({err: "Parameter polygon is missing", msg: "Failed to get clustered pickup points"}));
+        return;
+    }
+
+    var vals = polygon.split(',');
+    var coordinates = [];
+    var result = [];
+
+    for (var val = 0; val < vals.length - 1; val += 2) {
+        var json = [];
+        json.push(vals[val]);
+        json.push(vals[val + 1]);
+        result.push(json);
+    }
+    coordinates.push(result);
+
+    model.trips.find(
+        {
+            pickupPoint: {
+                $geoWithin: {
+                    $geometry: {
+                        type: "Polygon",
+                        coordinates: coordinates
+                    }
+                }
+            },
+            startTime: {
+                $gte: new Date("2014-04-01T00:00:00.000Z"),
+                $lte: new Date("2014-04-01T23:59:59.999Z")
+            }
+        }, function (err, docs) {
+            if (err) {
+                res.status(500).send(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                console.log(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                return;
+            }
+            var response = processClusterGeojson(docs, false);
+            //var response = cluster.clusterCalculate(geojsonResponse);
+            //console.log(response);
+            res.json(response);
+        });
+
+});
+
+router.get('/draw/clusterTrips', function (req, res) {
+    validate(req);
+    var polygon = req.query.polygon;
+    if (polygon == null) {
+        res.status(400).send(JSON.stringify({err: "Parameter polygon is missing", msg: "Failed to get clustered pickup points"}));
+        return;
+    }
+
+    var vals = polygon.split(',');
+    var coordinates = [];
+    var result = [];
+
+    for (var val = 0; val < vals.length - 1; val += 2) {
+        var json = [];
+        json.push(vals[val]);
+        json.push(vals[val + 1]);
+        result.push(json);
+    }
+    coordinates.push(result);
+
+    model.trips.find(
+        {
+            tripPoints: {
+                $geoWithin: {
+                    $geometry: {
+                        type: "Polygon",
+                        coordinates: coordinates
+                    }
+                }
+            },
+            startTime: {
+                $gte: new Date("2014-04-01T00:00:00.000Z"),
+                $lte: new Date("2014-04-01T23:59:59.999Z")
+            }
+        }, function (err, docs) {
+            if (err) {
+                res.status(500).send(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                console.log(JSON.stringify({err: err, msg: "Failed to get trips from db"}));
+                return;
+            }
+            var response = processClusterGeojson(docs, true);
+            res.json(response);
+        });
 });
 
 function processGeojson(doc, isPickup) {
@@ -154,6 +248,26 @@ function processTripGeojson(doc) {
     }
 
     return json;
+}
+
+function processClusterGeojson(doc, isTrip){
+    var result = [];
+    for(var jsonObj in doc)
+    {
+        var jsonRow = [];
+        jsonRow.push(doc[jsonObj]['_doc'].pickupPoint.coordinates[1]);
+        jsonRow.push(doc[jsonObj]['_doc'].pickupPoint.coordinates[0])
+        jsonRow.push(doc[jsonObj]['_doc']._id);
+        result.push(jsonRow);
+        if(isTrip){
+            jsonRow = [];
+            jsonRow.push(doc[jsonObj]['_doc'].dropdownPoint.coordinates[1]);
+            jsonRow.push(doc[jsonObj]['_doc'].dropdownPoint.coordinates[0])
+            jsonRow.push(doc[jsonObj]['_doc']._id);
+            result.push(jsonRow);
+        }
+    }
+    return result;
 }
 
 module.exports = router;

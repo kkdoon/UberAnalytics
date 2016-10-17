@@ -36,6 +36,15 @@ angular
         controller: 'StatsCtrl',
         controllerAs: 'stats'
       })
+      .when('/pickups', {
+        templateUrl: 'views/pickups.html',
+        controller: 'PickupsCtrl'
+      })
+      .when('/heat', {
+        templateUrl: 'views/heat.html',
+        controller: 'HeatCtrl',
+        controllerAs: 'heat'
+      })
       .otherwise({
         redirectTo: '/'
       });

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name clientApp.controller:MainCtrl
+ * @name clientApp.controller:StatsCtrl
  * @description
- * # MainCtrl
+ * # StatsCtrl
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MainCtrl', function ($scope, Restangular) {
+  .controller('StatsCtrl', function () {
     /*var map = Restangular.one("trip");
-    $scope.map = map.get({format: 'geojson'});*/
+     $scope.map = map.get({format: 'geojson'});*/
   });
