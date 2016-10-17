@@ -1,0 +1,23 @@
+1. Data import query:
+mongoimport --db taxicoll --collection trips --file processed.json
+
+2. Db Name: taxicoll
+
+3. Collection Sample Schema:
+
+Trips:
+
+{ "_id" : ObjectId("57fd912eed3d9e451afb9eb2"), "startTime" : ISODate("2014-04-01T05:36:00Z"), "endTime" : ISODate("2014-04-01T05:43:00Z"), "dropdownPoint" : { "type" : "Point", "coordinates" : [ -73.978, 40.7605 ] }, "pickupPoint" : { "type" : "Point", "coordinates" : [ -73.9632, 40.7651 ] }, "tripPoints" : { "type" : "LineString", "coordinates" : [ [ -73.9632, 40.7651 ], [ -73.978, 40.7605 ] ] } }
+
+TripFrequencyByMonth:
+
+{ "_id" : { "month" : 4, "day" : 9, "year" : 2014 }, "count" : 8423 }
+
+
+4. Geospatial Indexes:
+
+db.trips.createIndex( { pickupPoint : "2dsphere" , startTime : 1} )
+db.trips.createIndex( { dropdownPoint : "2dsphere" , startTime : 1} )
+db.trips.createIndex( { tripPoints : "2dsphere" , startTime : 1} )
+
+
