@@ -1,10 +1,11 @@
 <h3>Dashboard</h3>
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <div> <h4>Map</h4> </div>
+      <div> <h4> Taxi Map</h4> </div>
     </div>
     <div class="panel-body">
-      <div class="row" style="margin-left: 10%">
+      <div id = 'load' class="text-center hide" style="margin-left: 45%"></div>
+      <div class="row">
         <div class="dropdown col-sm-4">
           <div class="form-group">
             <strong>From Date:</strong>
@@ -27,20 +28,78 @@
             </div>
           </div>
         </div>
-      <div class = "col-sm-3" style="margin-left: 5%; margin-top: 15px">
+      <div class = "col-sm-1" style="margin-top: 15px">
         <button class="btn btn-success" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Filter
+          Category
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><a title="trip">Trips</a></li>
-          <li><a title="pickup">Pickup Points</a></li>
-          <li><a title="dropdown">Drop-Off Points</a></li>
+          <li><a title="trip">All Trips</a></li>
+          <li><a title="pickup">All Pickup Points</a></li>
+          <li><a title="dropdown">All Drop-Off Points</a></li>
         </ul>
       </div>
+
+        <div class = "col-sm-1" style="margin-left: 5%; margin-top: 15px">
+          <button class="btn btn-info" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Filter
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <li><a title="tripShape">Trips Within Shape</a></li>
+            <li><a title="clusterPickup">Top Pickup Cluster</a></li>
+            <li><a title="heat">Pickup/Dropdown Heat Map</a></li>
+          </ul>
+        </div>
+
+        <button id="clearBtn" type="button" class="btn btn-default" style="margin-left: 2%; margin-top: 15px;">Clear</button>
+
+      </div>
+      <div class="alert alert-danger" id="login-error" style="display:none;">
+        <button type="button" class="close">×</button>
       </div>
       <div id='map'>
       </div>
     </div>
   </div>
+<div class="row" style="margin-left: 15%">
+  <div class="col-xs-6 col-md-3">
 
+    <div class="panel status panel-danger">
+      <div class="panel-heading">
+        <h1 class="panel-title text-center">80 mph</h1>
+      </div>
+      <div class="panel-body text-center">
+        <strong>Max Speed</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-xs-6 col-md-3">
+
+    <div class="panel status panel-success">
+      <div class="panel-heading">
+        <h1 class="panel-title text-center">20 miles</h1>
+      </div>
+      <div class="panel-body text-center">
+        <strong>Max Distance Covered</strong>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="col-xs-6 col-md-3">
+
+    <div class="panel status panel-info">
+      <div class="panel-heading">
+        <h1 class="panel-title text-center">1800</h1>
+      </div>
+      <div class="panel-body text-center">
+        <strong>Total Trips</strong>
+      </div>
+    </div>
+
+
+  </div>
+</div>

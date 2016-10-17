@@ -53,8 +53,6 @@ router.get('/draw/trip', function (req, res) {
     var startDateTime =  req.query.startDate;
     var endDateTime =  req.query.endDate;
 
-    console.log(startDateTime + ',' + endDateTime);
-    
     if(startDateTime == null || endDateTime == null){
         res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get trips data from db"}));
         return;
@@ -121,6 +119,14 @@ router.get('/draw/clusterPickups', function (req, res) {
         return;
     }
 
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get cluster pickup data from db"}));
+        return;
+    }
+
     var vals = polygon.split(',');
     var coordinates = [];
     var result = [];
@@ -144,8 +150,8 @@ router.get('/draw/clusterPickups', function (req, res) {
                 }
             },
             startTime: {
-                $gte: new Date("2014-04-01T00:00:00.000Z"),
-                $lte: new Date("2014-04-01T23:59:59.999Z")
+                $gte:  new Date(Number(startDateTime)),
+                $lte : new Date(Number(endDateTime))
             }
         }, function (err, docs) {
             if (err) {
@@ -166,6 +172,14 @@ router.get('/draw/clusterTrips', function (req, res) {
     var polygon = req.query.polygon;
     if (polygon == null) {
         res.status(400).send(JSON.stringify({err: "Parameter polygon is missing", msg: "Failed to get clustered pickup points"}));
+        return;
+    }
+
+    var startDateTime =  req.query.startDate;
+    var endDateTime =  req.query.endDate;
+
+    if(startDateTime == null || endDateTime == null){
+        res.status(400).send(JSON.stringify({err: 'Provide startDate and endDate', msg: "Failed to get cluster pickup data from db"}));
         return;
     }
 
@@ -192,8 +206,8 @@ router.get('/draw/clusterTrips', function (req, res) {
                 }
             },
             startTime: {
-                $gte: new Date("2014-04-01T00:00:00.000Z"),
-                $lte: new Date("2014-04-01T23:59:59.999Z")
+                $gte:  new Date(Number(startDateTime)),
+                $lte : new Date(Number(endDateTime))
             }
         }, function (err, docs) {
             if (err) {
