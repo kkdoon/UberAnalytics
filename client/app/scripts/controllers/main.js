@@ -9,6 +9,7 @@
  */
 angular.module('clientApp')
   .controller('MainCtrl', function ($scope, Restangular) {
+      var hostname = "localhost";
       var featureLayer, featureGroup, heat;
       var currentFilter = 'tripShape';
       var prevDate = '4/1/2014 12:00 PM';
@@ -38,9 +39,11 @@ angular.module('clientApp')
             startLoading();
             plotFilteredTrips(requestObj);
           }else if(currentFilter === 'clusterPickup' && requestObj != null) {
+            $('#tripPanel').text('');
             startLoading();
             fetchTopPickups(requestObj);
           }else if(currentFilter === 'heat' && requestObj != null) {
+            $('#tripPanel').text('');
             startLoading();
             fetchHeatMap(requestObj);
           }
@@ -51,7 +54,13 @@ angular.module('clientApp')
           if(markers != null) {
             markers.clearLayers();
           }
-          featureLayer.loadURL('http://localhost:8080/v1/draw/' + event.target.title + "?" + getDateQueryParam()).addTo(map);
+          if(event.target.title === 'trip') {
+            fetchTripCount(null);
+          }else{
+            $('#tripPanel').text('');
+          }
+          featureLayer.loadURL('http://' + hostname + ':8080/v1/draw/' + event.target.title + "?" + getDateQueryParam()).addTo(map);
+
         }
       });
 
@@ -75,6 +84,7 @@ angular.module('clientApp')
           if(layer._heat != null)
             map.removeLayer(layer);
         });
+        $('#tripPanel').text('');
       });
 
       function getDateQueryParam(){
@@ -85,7 +95,62 @@ angular.module('clientApp')
         return "startDate=" + sDate.getTime() + "&endDate=" + eDate.getTime();
       }
 
-      /** Handling loader/error logic **/
+      /** AJAX Requests **/
+      // Fetch top-pickup
+      function fetchTopPickups(json) {
+        $.ajax({
+          'url' : 'http://' + hostname + ':8080/v1/draw/clusterPickups?polygon=' + json + "&" + getDateQueryParam(),
+          'type' : 'GET',
+          'success' : function(data) {
+            plotTopPickups(data);
+          },
+          'error': function (xhr, status, errorThrown) {
+            $('#login-error').text('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
+            finishedLoading();
+            $('#login-error').show();
+          }
+        });
+      }
+
+    // Fetch pickup/drop-off cluster
+    function fetchHeatMap(json) {
+      $.ajax({
+        'url' : 'http://' + hostname + ':8080/v1/draw/clusterTrips?polygon=' + json + "&" + getDateQueryParam(),
+        'type' : 'GET',
+        'success' : function(data) {
+          heat = L.heatLayer(data, {maxZoom: 18}).addTo(map);
+          finishedLoading();
+        },
+        'error': function (xhr, status, errorThrown) {
+          alert('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
+          finishedLoading();
+        }
+      });
+    }
+
+    // Fetch top-pickup
+    function fetchTripCount(json) {
+        var url;
+        if(json == null){
+          url = 'http://' + hostname + ':8080/v1/stats/tripCount?' + getDateQueryParam();
+        }else{
+          url = 'http://' + hostname + ':8080/v1/stats/tripCount?polygon=' + json + "&" + getDateQueryParam();
+        }
+        $.ajax({
+          'url' : url,
+          'type' : 'GET',
+          'success' : function(data) {
+            $('#tripPanel').text(data);
+          },
+          'error': function (xhr, status, errorThrown) {
+            $('#login-error').text('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
+            finishedLoading();
+            $('#login-error').show();
+          }
+        });
+    }
+
+    /** Handling loader/error logic **/
       function startLoading() {
         loader.className = 'show';
       }
@@ -108,8 +173,10 @@ angular.module('clientApp')
         .setView([40.77, -73.88], 11);
       featureGroup = L.featureGroup().addTo(map);
       featureLayer = L.mapbox.featureLayer()
-        .loadURL('http://localhost:8080/v1/draw/trip?' + getDateQueryParam())
+        .loadURL('http://' + hostname + ':8080/v1/draw/trip?' + getDateQueryParam())
         .addTo(map);
+
+      fetchTripCount(null);
 
       // Enabling clustering
       var markers = new L.MarkerClusterGroup();
@@ -150,8 +217,10 @@ angular.module('clientApp')
         if(currentFilter === 'tripShape') {
           plotFilteredTrips(requestObj);
         }else if(currentFilter === 'clusterPickup') {
+          $('#tripPanel').text('');
           fetchTopPickups(requestObj);
         }else if(currentFilter === 'heat') {
+          $('#tripPanel').text('');
           fetchHeatMap(requestObj);
         }
       }
@@ -182,8 +251,9 @@ angular.module('clientApp')
         /*if(featureLayer != null){
           featureLayer.clearLayers();
         }*/
+        fetchTripCount(json);
         featureLayer = L.mapbox.featureLayer()
-          .loadURL('http://localhost:8080/v1/draw/trip?polygon=' + json + "&" + getDateQueryParam())
+          .loadURL('http://' + hostname + ':8080/v1/draw/trip?polygon=' + json + "&" + getDateQueryParam())
           .addTo(map)
           .on('ready', finishedLoading)
           .on('error', function(error) {
@@ -195,38 +265,6 @@ angular.module('clientApp')
             finishedLoading();
             $('#login-error').show();
           });
-      }
-
-      // Fetch top-pickup
-      function fetchTopPickups(json) {
-        $.ajax({
-          'url' : 'http://localhost:8080/v1/draw/clusterPickups?polygon=' + json + "&" + getDateQueryParam(),
-          'type' : 'GET',
-          'success' : function(data) {
-            plotTopPickups(data);
-          },
-          'error': function (xhr, status, errorThrown) {
-            $('#login-error').text('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
-            finishedLoading();
-            $('#login-error').show();
-          }
-        });
-      }
-
-      // Fetch pickup/drop-off cluster
-      function fetchHeatMap(json) {
-        $.ajax({
-          'url' : 'http://localhost:8080/v1/draw/clusterTrips?polygon=' + json + "&" + getDateQueryParam(),
-          'type' : 'GET',
-          'success' : function(data) {
-            heat = L.heatLayer(data, {maxZoom: 18}).addTo(map);
-            finishedLoading();
-          },
-          'error': function (xhr, status, errorThrown) {
-            alert('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
-            finishedLoading();
-          }
-        });
       }
 
       // Plotting top pick-up places using clustering

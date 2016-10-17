@@ -9,7 +9,8 @@
  */
 angular.module('clientApp')
   .controller('ChartsCtrl', function ($scope) {
-  $.getJSON('http://localhost:8080/v1/stats/tripFrequency', function (data) {
+    var hostname = 'localhost';
+  $.getJSON('http://' + hostname + ':8080/v1/stats/tripFrequency', function (data) {
 
     $('#chart-container').highcharts({
       chart: {
@@ -65,4 +66,14 @@ angular.module('clientApp')
   });
 
   /** Chart 2: Top Speed, Max. Distance, No of Trips **/
+  $.ajax({
+    'url' : 'http://' + hostname + ':8080/v1/stats/tripCount',
+    'type' : 'GET',
+    'success' : function(data) {
+      $('#totalTripStat').text(data);
+    },
+    'error': function (xhr, status, errorThrown) {
+      console.log('Error Code: ' +  xhr.status + ' Message:' + xhr.responseText);
+    }
+  });
 });
